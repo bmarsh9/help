@@ -9,6 +9,15 @@ sudo dockerd &
 
 ## Git
 
+##### Common
+```
+git pull
+git checkout -b new-branch
+git add . 
+git commit -m "my changes"
+git push origin new-branch
+```
+
 ## K8
 
 ## Terraform
