@@ -18,6 +18,15 @@ git commit -m "my changes"
 git push origin new-branch
 ```
 
+##### Undo commit
+```
+git commit -m "Something terribly misguided" # (0: Your Accident)
+git reset HEAD~                              # (1)
+[ edit files as necessary ]                    # (2)
+git add .                                    # (3)
+git commit -c ORIG_HEAD                      # (4)
+```
+
 ## K8
 
 ## Terraform
