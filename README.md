@@ -1,5 +1,19 @@
 ## Flask
 
+##### Run
+```
+python3 manage.py runserver -h 0.0.0.0 -p 5000
+flask run --cert adhoc -h 0.0.0.0
+gunicorn --bind 0.0.0.0:5000 flask_app:app --access-logfile '-' --error-logfile "-"
+```
+
+##### Common migrations
+```
+python3 manage.py db migrate
+python3 manage.py db upgrade
+python3 manage.py db stamp head
+```
+
 ## Gunicorn
 ```
 gunicorn --bind 0.0.0.0:5000 flask_app:app --access-logfile '-' --error-logfile "-"
