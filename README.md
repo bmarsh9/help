@@ -110,6 +110,11 @@ git commit -m "my changes"
 git push origin new-branch
 ```
 
+##### View local env
+```
+git config --list --local
+```
+
 ##### Undo commit
 ```
 git commit -m "Something terribly misguided" # (0: Your Accident)
