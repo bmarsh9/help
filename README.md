@@ -1,10 +1,88 @@
 ## Flask
 
+## Gunicorn
+```
+gunicorn --bind 0.0.0.0:5000 flask_app:app --access-logfile '-' --error-logfile "-"
+```
+
 ## Docker
 
 ##### Docker daemon in WSL
 ```
 sudo dockerd &
+```
+
+##### Common commands
+```
+docker build --tag app:1.0.0 .
+docker exec -it app bash
+docker run -it -d -p 5000:5000 app
+```
+
+##### Sample Dockerfile for python
+```
+FROM python:3.8-slim-buster
+
+WORKDIR /app
+
+# for postgres connection
+RUN apt-get update \
+    && apt-get -y install libpq-dev gcc \
+    && pip3 install psycopg2
+
+COPY requirements.txt requirements.txt
+RUN pip3 install -r requirements.txt
+
+COPY . .
+
+CMD ["/bin/bash","run.sh"]
+```
+
+##### Sample docker-compose.yml for flask
+```
+version: '3'
+services:
+  app:
+    container_name: app
+    image: app
+    depends_on:
+      - postgres
+    networks:
+      - db_nw
+      - web_nw
+    ports:
+      - "5000:5000"
+    restart: unless-stopped
+    environment:
+      - SQLALCHEMY_DATABASE_URI=postgresql://${POSTGRES_USER:-db1}:${POSTGRES_PASSWORD:-db1}@${POSTGRES_HOST:-postgres}/${POSTGRES_DB:-db1}
+      - DEFAULT_EMAIL=${DEFAULT_EMAIL:-admin@example.com}
+      - DEFAULT_PASSWORD=${DEFAULT_PASSWORD:-admin}
+      - SETUP_DB=${SETUP_DB:-no}
+      - POSTGRES_DB=${POSTGRES_DB:-db1}
+      - VERSION=${VERSION:-1.0.0}
+  postgres:
+    container_name: postgres
+    image: postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-db1}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-db1}
+      POSTGRES_DB: ${POSTGRES_DB:-db1}
+      PGDATA: /data/postgres
+    #volumes:
+    #   - postgres:/data/postgres
+    #ports:
+    #  - "5432:5432"
+    networks:
+      - db_nw
+    restart: unless-stopped
+
+networks:
+  db_nw:
+    driver: bridge
+  web_nw:
+    driver: bridge
+volumes:
+  dbdata:
 ```
 
 ## Git
